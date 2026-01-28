@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] float maxHealth = 10;
+    [SerializeField] public float maxHealth = 10;
     [SerializeField] GameObject hitEffect;
     [SerializeField] GameObject destroyEffect;
     public float HP {
@@ -21,6 +23,8 @@ public class Health : MonoBehaviour
     {
         get { return health / maxHealth; }
     }
+
+    [SerializeField] UnityEvent destroyedEvent;
 
     void Start()
     {
@@ -43,7 +47,18 @@ public class Health : MonoBehaviour
             TankGameManager.Instance.Score += 100;
             if (destroyEffect != null) Instantiate(destroyEffect, transform.position, Quaternion.identity);
             Destroy(gameObject);
+            if (destroyedEvent != null)
+                destroyedEvent.Invoke();
+            
+            if (TankGameManager.Instance.Score >= 3300)
+                TankGameManager.Instance.onGameWin();
         }
+    }
 
+    public void OnHeal(float amount)
+    {
+        HP += amount;
+        if (HP > maxHealth)
+            HP = maxHealth;
     }
 }

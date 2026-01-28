@@ -37,7 +37,7 @@ public class Tank : MonoBehaviour
         
         transform.Rotate(Vector3.up * rotation * rotationSpeed * Time.deltaTime);
 
-        healthBar.value = 0.5f;
+        healthBar.value = health.HP / health.maxHealth;
 
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
